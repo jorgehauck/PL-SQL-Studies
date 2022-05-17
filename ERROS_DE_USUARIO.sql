@@ -1,0 +1,22 @@
+
+
+select * from cliente;
+
+EXECUTE ATUALIZAR_CLI_SEGMERCADO(15, 2);
+
+
+create or replace PROCEDURE atualizar_cli_segmercado
+(p_ID  CLIENTE.ID%TYPE, p_SEGMERCADO_ID  CLIENTE.SEGMERCADO_ID%TYPE)
+IS
+    e_CLIENTE_ID_INEXISTENTE exception;
+BEGIN
+    UPDATE CLIENTE SET SEGMERCADO_ID = p_SEGMERCADO_ID
+    WHERE ID = p_ID;
+    IF SQL%NOTFOUND THEN
+        RAISE e_CLIENTE_ID_INEXISTENTE;
+    END IF;
+    COMMIT;    
+EXCEPTION 
+    WHEN e_CLIENTE_ID_INEXISTENTE THEN
+    raise_application_error(-20100, 'Cliente inexistente!!!');
+END;
